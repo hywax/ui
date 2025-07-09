@@ -1,13 +1,13 @@
 import { ref, onScopeDispose } from 'vue'
 import type { Ref, Plugin as VuePlugin } from 'vue'
 import { createHooks } from 'hookable'
-
+import { usePage, router } from '@inertiajs/vue3'
+import { useColorMode as useColorModeVueUse } from '@vueuse/core'
 import appConfig from '#build/app.config'
 import type { NuxtApp } from '#app'
-import { useColorMode as useColorModeVueUse } from '@vueuse/core'
-import { usePage } from '@inertiajs/vue3'
 
 export { useHead } from '@unhead/vue'
+export { router as useRouter } from '@inertiajs/vue3'
 
 export { useAppConfig } from '../vue/composables/useAppConfig'
 export { defineShortcuts } from '../composables/defineShortcuts'
@@ -16,13 +16,10 @@ export { useLocale } from '../composables/useLocale'
 
 export const useRoute = () => {
   const page = usePage()
+
   return {
     fullPath: page.url
   }
-}
-
-export const useRouter = () => {
-
 }
 
 export const useColorMode = () => {
@@ -86,6 +83,10 @@ export function useRuntimeHook(name: string, fn: (...args: any[]) => void): void
   const unregister = nuxtApp.hook(name, fn)
 
   onScopeDispose(unregister)
+}
+
+export function clearError(options: { redirect: string }) {
+  return router.push({ url: options.redirect })
 }
 
 export function defineNuxtPlugin(plugin: (nuxtApp: NuxtApp) => void) {

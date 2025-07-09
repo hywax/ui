@@ -1,10 +1,10 @@
 import { ref, onScopeDispose } from 'vue'
 import type { Ref, Plugin as VuePlugin } from 'vue'
+import { useRouter } from 'vue-router'
 import { createHooks } from 'hookable'
-
+import { useColorMode as useColorModeVueUse } from '@vueuse/core'
 import appConfig from '#build/app.config'
 import type { NuxtApp } from '#app'
-import { useColorMode as useColorModeVueUse } from '@vueuse/core'
 
 export { useHead } from '@unhead/vue'
 export { useRoute, useRouter } from 'vue-router'
@@ -75,6 +75,10 @@ export function useRuntimeHook(name: string, fn: (...args: any[]) => void): void
   const unregister = nuxtApp.hook(name, fn)
 
   onScopeDispose(unregister)
+}
+
+export function clearError(options: { redirect: string }) {
+  return useRouter().push(options.redirect)
 }
 
 export function defineNuxtPlugin(plugin: (nuxtApp: NuxtApp) => void) {
